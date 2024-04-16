@@ -1,76 +1,43 @@
 import React, { useState } from 'react';
 import './App.css';
 
-function App() {
-  const [formData, setFormData] = useState({
-    nome: '',
-    endereco: '',
-    telefone: '',
-    email: ''
-  });
-  const [formErrors, setFormErrors] = useState({
-    nome: '',
-    endereco: '',
-    telefone: '',
-    email: ''
-  });
+function fibonacci(n) {
+  if (n <= 1) return n;
+  return fibonacci(n - 1) + fibonacci(n - 2);
+}
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
+function App() {
+  const [inputValue, setInputValue] = useState('');
+  const [fibResult, setFibResult] = useState(null);
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let errors = {};
-    let formIsValid = true;
-
-    // Verifica se os campos estão vazios
-    for (let key in formData) {
-      if (!formData[key]) {
-        errors[key] = `${key.charAt(0).toUpperCase() + key.slice(1)} é obrigatório.`;
-        formIsValid = false;
-      }
-    }
-
-    // Se houver erros, atualiza o estado dos erros, caso contrário, envia o formulário
-    if (!formIsValid) {
-      setFormErrors(errors);
+  const handleCalculateClick = () => {
+    const n = parseInt(inputValue);
+    if (!isNaN(n) && n >= 0) {
+      const result = fibonacci(n);
+      setFibResult(result);
     } else {
-      // Aqui você pode enviar os dados do formulário para onde desejar
-      alert('Formulário enviado com sucesso!');
+      alert('Por favor, insira um número inteiro não negativo.');
     }
   };
 
   return (
     <div className="App">
-      <h1>Verificação de Formulário</h1>
-      <form onSubmit={handleSubmit}>
+      <h1>Calculadora de Fibonacci</h1>
+      <div>
+        <label>Insira o valor de n:</label>
+        <input type="number" value={inputValue} onChange={handleInputChange} />
+        <button onClick={handleCalculateClick}>Calcular</button>
+      </div>
+      {fibResult !== null && (
         <div>
-          <label>Nome:</label>
-          <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
-          <span className="error">{formErrors.nome}</span>
+          <p>O {inputValue}-ésimo elemento da sequência de Fibonacci é:</p>
+          <p>{fibResult}</p>
         </div>
-        <div>
-          <label>Endereço:</label>
-          <input type="text" name="endereco" value={formData.endereco} onChange={handleChange} />
-          <span className="error">{formErrors.endereco}</span>
-        </div>
-        <div>
-          <label>Telefone:</label>
-          <input type="text" name="telefone" value={formData.telefone} onChange={handleChange} />
-          <span className="error">{formErrors.telefone}</span>
-        </div>
-        <div>
-          <label>Email:</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange} />
-          <span className="error">{formErrors.email}</span>
-        </div>
-        <button type="submit">Enviar</button>
-      </form>
+      )}
     </div>
   );
 }
