@@ -1,61 +1,39 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
 
-function fibonacci(n) {
-  const sequence = [0, 1];
-  for (let i = 2; i < n; i++) {
-    sequence.push(sequence[i - 1] + sequence[i - 2]);
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateRandomMatrix() {
+  const matrix = [];
+  for (let i = 0; i < 4; i++) {
+    const row = [];
+    for (let j = 0; j < 4; j++) {
+      row.push(getRandomInt(1, 100)); // Gera um número inteiro aleatório entre 1 e 100
+    }
+    matrix.push(row);
   }
-  return sequence;
+  return matrix;
 }
 
 function App() {
-  const [inputValue, setInputValue] = useState('');
-  const [fibSequence, setFibSequence] = useState([]);
-
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleCalculateClick = () => {
-    const n = parseInt(inputValue);
-    if (!isNaN(n) && n >= 0) {
-      const sequence = fibonacci(n);
-      setFibSequence(sequence);
-    } else {
-      alert('Por favor, insira um número inteiro não negativo.');
-    }
-  };
+  const randomMatrix = generateRandomMatrix();
 
   return (
     <div className="App">
-      <h1>Calculadora da Sequência de Fibonacci</h1>
-      <div>
-        <label>Insira o valor de n:</label>
-        <input type="number" value={inputValue} onChange={handleInputChange} />
-        <button onClick={handleCalculateClick}>Calcular</button>
-      </div>
-      {fibSequence.length > 0 && (
-        <div>
-          <h2>Sequência de Fibonacci com {inputValue} elementos:</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Índice</th>
-                <th>Valor</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fibSequence.map((num, index) => (
-                <tr key={index}>
-                  <td>{index}</td>
-                  <td>{num}</td>
-                </tr>
+      <h1>Tabela de Números Aleatórios</h1>
+      <table>
+        <tbody>
+          {randomMatrix.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              {row.map((number, columnIndex) => (
+                <td key={columnIndex}>{number}</td>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
