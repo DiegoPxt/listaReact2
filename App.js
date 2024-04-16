@@ -2,31 +2,58 @@ import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [strings, setStrings] = useState([]);
+  const [rowCount, setRowCount] = useState(0);
+  const [inputText, setInputText] = useState('');
+  const [tableData, setTableData] = useState([]);
 
-  // Função para gerar strings com tamanhos diferentes
-  const generateStrings = () => {
-    const generatedStrings = [];
-    for (let i = 0; i < 10; i++) {
-      const randomLength = Math.floor(Math.random() * 20) + 5; // Tamanhos aleatórios entre 5 e 25
-      const randomString = Math.random().toString(36).substring(2, randomLength + 2);
-      generatedStrings.push(randomString);
+  const handleGenerateTable = () => {
+    const data = [];
+    for (let i = 0; i < rowCount; i++) {
+      data.push({ index: i, content: inputText });
     }
-    setStrings(generatedStrings);
+    setTableData(data);
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Strings com Tamanhos Diferentes</h1>
-        <button onClick={generateStrings}>Gerar Strings</button>
-        <div className="string-container">
-          {strings.map((str, index) => (
-            <div key={index} style={{ fontSize: `${Math.floor(Math.random() * 40) + 12}px` }}>
-              {str}
-            </div>
-          ))}
-        </div>
+        <h1>Criar Tabela</h1>
+        <label htmlFor="rowCount">Número de Linhas:</label>
+        <input
+          type="number"
+          id="rowCount"
+          value={rowCount}
+          onChange={(e) => setRowCount(parseInt(e.target.value))}
+        />
+        <br />
+        <label htmlFor="inputText">Texto para as Linhas:</label>
+        <input
+          type="text"
+          id="inputText"
+          value={inputText}
+          onChange={(e) => setInputText(e.target.value)}
+        />
+        <br />
+        <button onClick={handleGenerateTable}>Gerar Tabela</button>
+        <br />
+        {tableData.length > 0 && (
+          <table>
+            <thead>
+              <tr>
+                <th>Índice</th>
+                <th>Conteúdo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableData.map((row, index) => (
+                <tr key={index}>
+                  <td>{row.index}</td>
+                  <td>{row.content}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </header>
     </div>
   );
